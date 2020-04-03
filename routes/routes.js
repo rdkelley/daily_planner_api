@@ -6,8 +6,7 @@ module.exports = app => {
   });
 
   app.post("/api/user", (req, res) => {
-    console.log("Hello, this is POST /user");
-
+    // Create user in database
     db.User.create(req.body)
       .then(() => {
         return res.send(true);

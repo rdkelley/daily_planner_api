@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
 
+  // Before user saves to database, hash password
   User.beforeCreate(async user => {
     const salt = await bcrypt.genSalt(10);
 
