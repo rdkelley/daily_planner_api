@@ -3,6 +3,7 @@ const helmet = require("helmet");
 
 const app = express();
 
+// Helmet adds some common security-related HTTP headers.
 app.use(helmet());
 
 const db = require("./models");
@@ -18,7 +19,7 @@ require("./routes/routes")(app);
 
 const PORT = process.env.PORT || 8080;
 
-db.sequelize.sync({ }).then(function () {
+db.sequelize.sync({}).then(function () {
   app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
   });
