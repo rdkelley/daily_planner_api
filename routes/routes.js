@@ -30,10 +30,12 @@ module.exports = (app) => {
         email,
       },
     }).then((user) => {
+      // If no user, return 406 error
       if (!user) {
         return res.status(406).send("User not found.");
       }
 
+      // Compare hashed, attempted PW with PW in database
       bcrypt.compare(password, user.password, function (err, result) {
         if (err) {
           console.log(err);
@@ -41,22 +43,16 @@ module.exports = (app) => {
           return res.status(500).send("Service unavailable");
         }
 
+        // If no match, return 401 error
         if (!result) {
           return res.status(401).send("Unauthorized");
         }
 
+        // If match, generate JWT
         return res.send({
           jwt: "JWT GOES HERE",
         });
       });
     });
-
-    // If the user does exist, hash the attempted password
-
-    // Compare attempted PW with PW in database
-
-    // If match, generate JWT
-
-    // Else, return a 401 (Unauthorized) error
   });
 };
