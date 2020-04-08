@@ -1,5 +1,22 @@
 const db = require("../models");
 const bcrypt = require("bcrypt");
+const jwt = require("jwt-simple");
+
+require("dotenv").config();
+
+const checkJwt = (req, res, next) => {
+  try {
+    var decoded = jwt.decode(req.token, process.env.JWT_SECRET);
+  } catch (error) {
+    console.log("ERROR", error);
+
+    next();
+  }
+
+  req.user = decoded;
+
+  next();
+};
 
 module.exports = (app) => {
   app.get("/", (req, res) => {
@@ -12,7 +29,7 @@ module.exports = (app) => {
       .then(() => {
         return res.send(true);
       })
-      .catch((error) => {
+      .catch(() => {
         return res.status(500).send("Something went wrong.");
       });
   });
@@ -48,11 +65,20 @@ module.exports = (app) => {
           return res.status(401).send("Unauthorized");
         }
 
+        console.log(process.env.JWT_SECRET);
+
         // If match, generate JWT
         return res.send({
-          jwt: "JWT GOES HERE",
+          token: jwt.encode({ userId: user.id }, process.env.JWT_SECRET),
         });
       });
     });
+  });
+
+  app.get("/api/tasks", checkJwt, (req, res) => {
+
+    console.log(req.user);
+    
+    res.send("Here are your tasks");
   });
 };
