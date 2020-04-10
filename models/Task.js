@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     description: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         len: [1, 500],
       },
@@ -22,6 +22,14 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   });
+
+  Task.associate = function (models) {
+    Task.belongsTo(models.User, {
+      foreignKey: {
+        allowNull: false,
+      },
+    });
+  };
 
   return Task;
 };
