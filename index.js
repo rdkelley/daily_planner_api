@@ -8,8 +8,10 @@ const app = express();
 // Helmet adds some common security-related HTTP headers.
 app.use(helmet());
 
+// CORS is added to allow requests from outside domains (cross-origin requests)
 app.use(cors());
 
+// Attaches the contents of the incoming Authorization header to req.token
 app.use(bearerToken());
 
 const db = require("./models");
