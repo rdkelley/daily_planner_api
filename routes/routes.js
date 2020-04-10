@@ -8,9 +8,10 @@ const checkJwt = (req, res, next) => {
   try {
     var decoded = jwt.decode(req.token, process.env.JWT_SECRET);
   } catch (error) {
-    console.log("ERROR", error);
-
-    next();
+    return next({
+      status: 401,
+      message: "Unauthorized",
+    });
   }
 
   req.user = decoded;
@@ -23,14 +24,17 @@ module.exports = (app) => {
     res.send("Hello world");
   });
 
-  app.post("/api/user", (req, res) => {
+  app.post("/api/user", (req, res, next) => {
     // Create user in database
     db.User.create(req.body)
       .then(() => {
         return res.send(true);
       })
       .catch(() => {
-        return res.status(500).send("Something went wrong.");
+        return next({
+          status: 503,
+          message: "Error creating user",
+        });
       });
   });
 
@@ -74,9 +78,19 @@ module.exports = (app) => {
   });
 
   app.get("/api/tasks", checkJwt, (req, res) => {
-
     console.log(req.user);
-    
+
     res.send("Here are your tasks");
+  });
+
+  // eslint-disable-next-line no-unused-vars
+  app.use(function (err, req, res, next) {
+    console.log(err);
+
+    if (err.status && err.message) {
+      return res.status(err.status).send(err.message);
+    }
+
+    return res.status(500).send("That didn't work.");
   });
 };

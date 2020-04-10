@@ -1,13 +1,16 @@
 const express = require("express");
 const helmet = require("helmet");
 const bearerToken = require("express-bearer-token");
+const cors = require("cors");
 
 const app = express();
 
-app.use(bearerToken());
-
 // Helmet adds some common security-related HTTP headers.
 app.use(helmet());
+
+app.use(cors());
+
+app.use(bearerToken());
 
 const db = require("./models");
 
