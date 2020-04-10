@@ -65,8 +65,6 @@ module.exports = (app) => {
           return res.status(401).send("Unauthorized");
         }
 
-        console.log(process.env.JWT_SECRET);
-
         // If match, generate JWT
         return res.send({
           token: jwt.encode({ userId: user.id }, process.env.JWT_SECRET),
