@@ -16,22 +16,12 @@ if (env === "production") {
 
 const db = {};
 
-let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config
-  );
-} else {
-  sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
-    config
-  );
-}
+let sequelize = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  config
+);
 
 fs.readdirSync(__dirname)
   .filter((file) => {
