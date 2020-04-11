@@ -8,6 +8,8 @@ const env = process.env.NODE_ENV || "development";
 
 let config;
 
+console.log("env", env);
+
 if (env === "production") {
   config = require(__dirname + "/../config/config-prod.js")[env];
 } else {
